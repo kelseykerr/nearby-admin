@@ -1,0 +1,63 @@
+#banner {
+  border-bottom: none;
+  margin-top: -20px;
+}
+
+#banner h1 {
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.hero-unit {
+  position: relative;
+  padding: 30px 15px;
+  color: #F5F5F5;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  background: #4EE2EC;
+}
+
+.navbar-text {
+  margin-left: 15px;
+}
+
+.header-img {
+  max-height: 150px;
+}
+
+.filters {
+  margin-bottom: 25px;
+}
+
+.margin-top-30 {
+  margin-top: 70px;
+}
+
+.blue-underline {
+  color: #4EE2EC;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.big-bold {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.line-height-25px {
+  line-height: 25px;
+}
+
+.footer {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  line-height: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.object-info {
+  margin-left: 40px;
+  color: #777;
+}

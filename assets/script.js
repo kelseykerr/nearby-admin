@@ -1,0 +1,2 @@
+"use strict";angular.module("nearbyAdminApp").factory("adminService",["$http",function(r){return{fetchUsers:function(e){return r({method:"GET",url:"/api/users"+(void 0!==e?e:"")})}}}]);
+"use strict";angular.module("nearbyAdminApp",["ngCookies","ngResource","ngSanitize","ngTouch","ui.router"]).config(function(t,e){t.state("data",{url:"/",templateUrl:"views/data.html",controller:"DataCtrl"}),e.html5Mode(!0)});

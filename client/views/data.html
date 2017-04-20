@@ -1,0 +1,71 @@
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Nearby Data</h1>
+    <!--<img class="header-img" src="assets/images/nearby_pin_white.png" alt="nearby pin">-->
+  </div>
+</header>
+
+<div class="container">
+  <div class="row col-md-12 col-lg-12 col-sm-12">
+    <div class="page-header big-bold col-md-10 col-lg-10 col-sm-10">Nearby Users</div>
+    <div class="page-header line-height-25px blue-underline col-md-2 col-lg-2 col-sm-2"
+         ng-click="data.toggleFilters()">{{ data.filtersText }}
+    </div>
+  </div>
+  <div ng-show="data.showFilters" class="filters col-lg-12">
+    <div class="col-md-6 col-lg-6 col-sm-6">
+      <div moment-picker="data.filters.createdStart" format="MM/DD/YYYY HH:mm">createdDate start: <b
+        class="blue-underline"> {{ data.filters.createdStart }} </b></div>
+    </div>
+    <div class="col-md-6 col-lg-6 col-sm-6">
+      <div moment-picker="data.filters.createdEnd" format="MM-DD-YYYY HH:mm">createdDate end: <b
+        class="blue-underline"> {{ data.filters.createdEnd }}</b></div>
+    </div>
+    <div class="col-md-6">
+      
+    </div>
+    <div class="col-md-6">
+    </div>
+    <div class="margin-top-30">
+      <button class="btn" ng-click="data.filterUsers()">filter</button>
+    </div>
+  </div>
+  <ul class="nav nav-tabs" ng-repeat="user in data.users">
+    <li>
+      <a href="#" class="object-header" ng-click="data.expandUser(user)"
+         uib-tooltip="{{user._id}}">{{user.name}}</a>
+      <div ng-show="user.expand" class="object-info">
+        <p><b>_id: </b>{{user._id}}</p>
+        <p><b>firstName: </b>{{user.firstName}}</p>
+        <p><b>lastName: </b>{{user.lastName}}</p>
+        <p><b>userId: </b>{{user.userId}}</p>
+        <p><b>fcmRegistrationId: </b>{{user.fcmRegistrationId}}</p>
+        <p><b>name: </b>{{user.name}}</p>
+        <p><b>email: </b>{{user.email}}</p>
+        <p><b>phone: </b>{{user.phone}}</p>
+        <p><b>address: </b>{{user.address}}</p>
+        <p><b>city: </b>{{user.city}}</p>
+        <p><b>state: </b>{{user.state}}</p>
+        <p><b>zip: </b>{{user.zip}}</p>
+        <p><b>homeLocation: </b>{{user.homeLocation}}</p>
+        <p><b>newRequestNotificationsEnabled: </b>{{user.newRequestNotificationsEnabled}}</p>
+        <p><b>notificationRadius: </b>{{user.notificationRadius}}</p>
+        <p><b>currentLocationNotifications: </b>{{user.currentLocationNotifications}}</p>
+        <p><b>homeLocationNotifications: </b>{{user.homeLocationNotifications}}</p>
+        <p><b>pictureUrl: </b>{{user.pictureUrl}}</p>
+        <p><b>customerId: </b>{{user.customerId}}</p>
+        <p><b>dateOfBirth: </b>{{user.dateOfBirth}}</p>
+        <p><b>tosAccepted: </b>{{user.tosAccepted}}</p>
+        <p><b>timeTosAccepted: </b>{{user.timeTosAccepted}}</p>
+        <p><b>tosAcceptIp: </b>{{user.tosAcceptIp}}</p>
+        <p><b>stripeManagedAccountId: </b>{{user.stripeManagedAccountId}}</p>
+        <p><b>stripeCustomerId: </b>{{user.stripeCustomerId}}</p>
+        <p><b>stripeSecretKey: </b>{{user.stripeSecretKey}}</p>
+        <p><b>stripePublishableKey: </b>{{user.stripePublishableKey}}</p>
+        <p><b>userAgent: </b>{{user.userAgent}}</p>
+        <p><b>authMethod: </b>{{user.authMethod}}</p>
+        <p><b>createdDate: </b>{{user.createdDate}}</p>
+      </div>
+    </li>
+  </ul>
+</div>
