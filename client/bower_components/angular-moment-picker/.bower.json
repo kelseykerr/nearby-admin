@@ -45,6 +45,5 @@
   },
   "_source": "https://github.com/alanjhonnes/angular-moment-picker.git",
   "_target": "^0.0.16",
-  "_originalSource": "angular-moment-picker",
-  "_direct": true
+  "_originalSource": "angular-moment-picker"
 }
