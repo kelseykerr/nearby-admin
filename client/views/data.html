@@ -21,8 +21,12 @@
       <div moment-picker="data.filters.createdEnd" format="MM-DD-YYYY HH:mm">createdDate end: <b
         class="blue-underline"> {{ data.filters.createdEnd }}</b></div>
     </div>
-    <div class="col-md-6">
-      
+    <div class="col-md-6" ng-if="data.mapLoaded">
+      <ui-gmap-google-map center="data.map.center" zoom="data.map.zoom" draggable="true"
+                        events="data.map.events" options="data.map.options">
+      <ui-gmap-marker coords="data.map.marker.coords" icon="data.map.marker.icon"
+                      idkey="data.map.marker.id"></ui-gmap-marker>
+    </ui-gmap-google-map>
     </div>
     <div class="col-md-6">
     </div>

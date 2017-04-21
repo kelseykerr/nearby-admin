@@ -9,7 +9,7 @@ angular
     'ui.router',
     'angularMoment',
     'moment-picker',
-    'ngMap'
+    'uiGmapgoogle-maps'
   ])
   .config(function($stateProvider, $locationProvider) {
     $stateProvider
