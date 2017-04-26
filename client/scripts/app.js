@@ -9,7 +9,8 @@ angular
     'ui.router',
     'angularMoment',
     'moment-picker',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'pageslide-directive'
   ])
   .config(function($stateProvider, $locationProvider) {
     $stateProvider

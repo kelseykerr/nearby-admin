@@ -65,3 +65,39 @@
 .angular-google-map-container {
   height: 400px;
 }
+
+.date-filter {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.left-panel {
+  background-color: rgba(119, 119, 119, 0.9);
+  overflow-y: scroll;
+  width: 350px !important;
+}
+
+.close-panel-btn {
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.close-panel-btn:hover {
+  font-size: 18px;
+}
+
+.panel-menu-btn {
+  float: left;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.filter-section-header {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 20px;
+}

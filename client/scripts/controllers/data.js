@@ -29,6 +29,8 @@ angular.module('nearbyAdminApp')
 
       showMap: false,
 
+      showLeft: true,
+
       getUsers: function(queryParams) {
         adminService.fetchUsers(queryParams)
           .then(function(response) {
@@ -77,8 +79,8 @@ angular.module('nearbyAdminApp')
         return deferred.promise;
       },
 
-      toggleFilters: function() {
-        $scope.data.showFilters = !$scope.data.showFilters;
+      toggleLeft: function() {
+        $scope.data.showLeft = !$scope.data.showLeft;
         if (!$scope.data.showMap) {
           window.setTimeout(function() {
             $scope.data.getFilterMap().then(function(map) {
