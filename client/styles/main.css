@@ -1,3 +1,7 @@
+.nav, .pagination, .carousel, .panel-title a {
+  cursor: pointer;
+}
+
 #banner {
   border-bottom: none;
   margin-top: -20px;
@@ -10,12 +14,17 @@
 }
 
 .hero-unit {
-  position: relative;
-  padding: 30px 15px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  height: 70px;
   color: #F5F5F5;
   text-align: center;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
   background: #4EE2EC;
+}
+
+.container-first {
+  margin-top: 70px;
 }
 
 .navbar-text {
@@ -32,6 +41,26 @@
 
 .margin-top-30 {
   margin-top: 70px;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.object-picker {
+  font-size: 16px;
+  color: #777777;
+  font-family: Verdana, Geneva, sans-serif;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+/*TODO: only add left margin if screen width is greater than x */
+
+.margin-left-350 {
+  margin-left: 350px !important;
+  margin-right: 10px !important;
 }
 
 .blue-underline {
@@ -72,16 +101,17 @@
 }
 
 .left-panel {
-  background-color: rgba(119, 119, 119, 0.9);
+  /*background-color: rgba(119, 119, 119, 0.9);*/
+  background-color: #FFFFFF;
   overflow-y: scroll;
-  width: 350px !important;
+  border-right: 1px solid #b7b7b7;
 }
 
 .close-panel-btn {
   float: right;
   margin-right: 15px;
   cursor: pointer;
-  color: #ffffff;
+  color: #777777;
   font-size: 16px;
 }
 
@@ -89,15 +119,39 @@
   font-size: 18px;
 }
 
-.panel-menu-btn {
-  float: left;
+.filter-btn {
   cursor: pointer;
-  font-size: 20px;
+  line-height: 20px;
+}
+
+.filter-btn i {
+  font-size: 16px;
 }
 
 .filter-section-header {
-  text-decoration: underline;
-  font-weight: bold;
-  font-size: 16px;
+  border-bottom: 1px solid #b3b3b3;
   margin-top: 20px;
+  color: #777777;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.filter-body {
+  color: #777777;
+  font-family: Verdana, Geneva, sans-serif;
+  margin-left: 15px;
+}
+
+.page-header {
+  color: #b3b3b3;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+  background-color: #4EE2EC !important;
+  border-color: #4EE2EC !important;
+  color: #FFFFFF !important;
+}
+
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover, .pagination>li>a, .pagination>li>span {
+  color: #4EE2EC !important;
 }

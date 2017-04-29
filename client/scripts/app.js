@@ -10,7 +10,9 @@ angular
     'angularMoment',
     'moment-picker',
     'uiGmapgoogle-maps',
-    'pageslide-directive'
+    'pageslide-directive',
+    'ngAnimate',
+    'ui.bootstrap'
   ])
   .config(function($stateProvider, $locationProvider) {
     $stateProvider

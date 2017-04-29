@@ -1,21 +1,35 @@
 <div>
-  <pageslide ps-open="data.showLeft" ps-side="left" ps-class="left-panel">
+  <pageslide ps-open="data.showLeft" ps-side="left" ps-class="left-panel" ps-size="350px" ps-click-outside="false">
     <div>
       <p><span ng-click="data.toggleLeft()" class="close-panel-btn glyphicon glyphicon-remove"></span></p>
       <div class="filters col-lg-12">
-        <div class="filter-section-header">Created Date</div>
-        <div class="date-filter">
-          <div moment-picker="data.filters.createdStart" format="MM/DD/YYYY HH:mm">start: <b class="blue-underline"> {{ data.filters.createdStart }} </b></div>
+        <div class="filter-section-header">CREATED DATE</div>
+        <div class="date-filter filter-body">
+          <div moment-picker="data.filters.createdStart" format="MM/DD/YYYY HH:mm">START: <b class="blue-underline"> {{ data.filters.createdStart }} </b></div>
         </div>
-        <div class="date-filter">
-          <div moment-picker="data.filters.createdEnd" format="MM-DD-YYYY HH:mm">end: <b class="blue-underline"> {{ data.filters.createdEnd }}</b></div>
+        <div class="date-filter filter-body">
+          <div moment-picker="data.filters.createdEnd" format="MM-DD-YYYY HH:mm">END: <b class="blue-underline"> {{ data.filters.createdEnd }}</b></div>
         </div>
-        <div class="filter-section-header">Location</div>
-        <div class="" ng-if="data.mapLoaded">
+        <div class="filter-section-header">LOCATION</div>
+        <div class="margin-top-10" ng-if="data.mapLoaded">
           <ui-gmap-google-map center="data.map.center" zoom="data.map.zoom" draggable="true" events="data.map.events" options="data.map.options">
             <ui-gmap-marker coords="data.map.marker.coords" icon="data.map.marker.icon" idkey="data.map.marker.id"></ui-gmap-marker>
           </ui-gmap-google-map>
         </div>
+        <div class="form-group form-group-md">
+          <div class="panel-label text-uppercase">latitude</div>
+          <input type="text" class="form-control nav-input" ng-model="data.latitude" disabled/>
+        </div>
+        <div class="form-group form-group-md">
+          <div class="panel-label text-uppercase">longitude</div>
+          <input type="text" class="form-control nav-input" ng-model="data.longitude" disabled/>
+        </div>
+
+        <div id="bottom" class="form-group form-group-md">
+          <div class="panel-label text-uppercase">proximity</div>
+          <select class="form-control nav-input" ng-options="option.name for option in data.radiusOptions" ng-model="data.selectedRadius"></select>
+        </div>
+
         <div class="">
         </div>
         <div class="margin-top-30">
@@ -25,74 +39,66 @@
     </div>
   </pageslide>
 
-  <header class="hero-unit" id="banner">
-    <p><span ng-click="data.toggleLeft()" class="panel-menu-btn glyphicon glyphicon-menu-hamburger"></span></p>
-    <div class="container">
-      <h1>Nearby Data</h1>
-      <!--<img class="header-img" src="assets/images/nearby_pin_white.png" alt="nearby pin">-->
-    </div>
-  </header>
+  <nav class="hero-unit" id="banner" ng-class="{ 'margin-left-350': data.showLeft}">
+    <div>
+      <ul>
+        <li class="filter-btn">
+          <i class="fa fa-filter" aria-hidden="true" ng-click="data.toggleLeft()"></i>
+        </li>
+        <li>Nearby Admin</li>
+      </ul>
 
-  <div class="container">
-    <div class="row col-md-12 col-lg-12 col-sm-12">
-      <div class="page-header big-bold col-md-8 col-lg-8 col-sm-8">Nearby Users</div>
-      <div class="page-header line-height-25px blue-underline col-md-2 col-lg-2 col-sm-2" ng-click="data.toggleFilters()">{{ data.filtersText }}</div>
+    </div>
+  </nav>
+
+  <div class="container-first" ng-class="{ 'margin-left-350': data.showLeft}">
+    <div class="row col-md-6 col-lg-6 col-sm-6 object-picker">
+      <select class="" ng-model="data.searchObject">
+        <option ng-repeat="object in data.searchObjects">{{object}}</option>
+      </select>
+      <!--<div class="page-header">USERS</div>-->
+    </div>
+    <div class="row col-md-6 col-lg-6 col-sm-6">
+      <ul uib-pagination total-items="data.pagination.total" ng-model="data.pagination.page" ng-change="data.pageChanged()" items-per-page="data.pagination.limit"></ul>
     </div>
   </div>
-  <!--<div ng-show="data.showFilters" class="filters col-lg-12">
-    <div class="col-md-6 col-lg-6 col-sm-6 date-filter">
-      <div moment-picker="data.filters.createdStart" format="MM/DD/YYYY HH:mm">Created Date start: <b class="blue-underline"> {{ data.filters.createdStart }} </b></div>
-    </div>
-    <div class="col-md-6 col-lg-6 col-sm-6 date-filter">
-      <div moment-picker="data.filters.createdEnd" format="MM-DD-YYYY HH:mm">Created Date end: <b class="blue-underline"> {{ data.filters.createdEnd }}</b></div>
-    </div>
-    <div class="col-md-6" ng-if="data.mapLoaded">
-      <ui-gmap-google-map center="data.map.center" zoom="data.map.zoom" draggable="true" events="data.map.events" options="data.map.options">
-        <ui-gmap-marker coords="data.map.marker.coords" icon="data.map.marker.icon" idkey="data.map.marker.id"></ui-gmap-marker>
-      </ui-gmap-google-map>
-    </div>
-    <div class="col-md-6">
-    </div>
-    <div class="margin-top-30">
-      <button class="btn" ng-click="data.filterUsers()">filter</button>
-    </div>
-  </div>-->
-  <ul class="nav nav-tabs" ng-repeat="user in data.users">
-    <li>
-      <a href="#" class="object-header" ng-click="data.expandUser(user)" uib-tooltip="{{user._id}}">{{user.name}}</a>
-      <div ng-show="user.expand" class="object-info">
-        <p><b>_id: </b>{{user._id}}</p>
-        <p><b>firstName: </b>{{user.firstName}}</p>
-        <p><b>lastName: </b>{{user.lastName}}</p>
-        <p><b>userId: </b>{{user.userId}}</p>
-        <p><b>fcmRegistrationId: </b>{{user.fcmRegistrationId}}</p>
-        <p><b>name: </b>{{user.name}}</p>
-        <p><b>email: </b>{{user.email}}</p>
-        <p><b>phone: </b>{{user.phone}}</p>
-        <p><b>address: </b>{{user.address}}</p>
-        <p><b>city: </b>{{user.city}}</p>
-        <p><b>state: </b>{{user.state}}</p>
-        <p><b>zip: </b>{{user.zip}}</p>
-        <p><b>homeLocation: </b>{{user.homeLocation}}</p>
-        <p><b>newRequestNotificationsEnabled: </b>{{user.newRequestNotificationsEnabled}}</p>
-        <p><b>notificationRadius: </b>{{user.notificationRadius}}</p>
-        <p><b>currentLocationNotifications: </b>{{user.currentLocationNotifications}}</p>
-        <p><b>homeLocationNotifications: </b>{{user.homeLocationNotifications}}</p>
-        <p><b>pictureUrl: </b>{{user.pictureUrl}}</p>
-        <p><b>customerId: </b>{{user.customerId}}</p>
-        <p><b>dateOfBirth: </b>{{user.dateOfBirth}}</p>
-        <p><b>tosAccepted: </b>{{user.tosAccepted}}</p>
-        <p><b>timeTosAccepted: </b>{{user.timeTosAccepted}}</p>
-        <p><b>tosAcceptIp: </b>{{user.tosAcceptIp}}</p>
-        <p><b>stripeManagedAccountId: </b>{{user.stripeManagedAccountId}}</p>
-        <p><b>stripeCustomerId: </b>{{user.stripeCustomerId}}</p>
-        <p><b>stripeSecretKey: </b>{{user.stripeSecretKey}}</p>
-        <p><b>stripePublishableKey: </b>{{user.stripePublishableKey}}</p>
-        <p><b>userAgent: </b>{{user.userAgent}}</p>
-        <p><b>authMethod: </b>{{user.authMethod}}</p>
-        <p><b>createdDate: </b>{{user.createdDate}}</p>
-      </div>
-    </li>
-  </ul>
-</div>
+  <div class="container" ng-class="{ 'margin-left-350': data.showLeft}">
+    <ul class="nav nav-tabs" ng-repeat="user in data.users">
+      <li>
+        <a href="#" class="object-header" ng-click="data.expandUser(user)" uib-tooltip="{{user._id}}">{{user.name}}</a>
+        <div ng-show="user.expand" class="object-info">
+          <p><b>_id: </b>{{user._id}}</p>
+          <p><b>firstName: </b>{{user.firstName}}</p>
+          <p><b>lastName: </b>{{user.lastName}}</p>
+          <p><b>userId: </b>{{user.userId}}</p>
+          <p><b>fcmRegistrationId: </b>{{user.fcmRegistrationId}}</p>
+          <p><b>name: </b>{{user.name}}</p>
+          <p><b>email: </b>{{user.email}}</p>
+          <p><b>phone: </b>{{user.phone}}</p>
+          <p><b>address: </b>{{user.address}}</p>
+          <p><b>city: </b>{{user.city}}</p>
+          <p><b>state: </b>{{user.state}}</p>
+          <p><b>zip: </b>{{user.zip}}</p>
+          <p><b>homeLocation: </b>{{user.homeLocation}}</p>
+          <p><b>newRequestNotificationsEnabled: </b>{{user.newRequestNotificationsEnabled}}</p>
+          <p><b>notificationRadius: </b>{{user.notificationRadius}}</p>
+          <p><b>currentLocationNotifications: </b>{{user.currentLocationNotifications}}</p>
+          <p><b>homeLocationNotifications: </b>{{user.homeLocationNotifications}}</p>
+          <p><b>pictureUrl: </b>{{user.pictureUrl}}</p>
+          <p><b>customerId: </b>{{user.customerId}}</p>
+          <p><b>dateOfBirth: </b>{{user.dateOfBirth}}</p>
+          <p><b>tosAccepted: </b>{{user.tosAccepted}}</p>
+          <p><b>timeTosAccepted: </b>{{user.timeTosAccepted}}</p>
+          <p><b>tosAcceptIp: </b>{{user.tosAcceptIp}}</p>
+          <p><b>stripeManagedAccountId: </b>{{user.stripeManagedAccountId}}</p>
+          <p><b>stripeCustomerId: </b>{{user.stripeCustomerId}}</p>
+          <p><b>stripeSecretKey: </b>{{user.stripeSecretKey}}</p>
+          <p><b>stripePublishableKey: </b>{{user.stripePublishableKey}}</p>
+          <p><b>userAgent: </b>{{user.userAgent}}</p>
+          <p><b>authMethod: </b>{{user.authMethod}}</p>
+          <p><b>createdDate: </b>{{user.createdDate}}</p>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>

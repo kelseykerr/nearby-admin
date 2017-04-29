@@ -18,6 +18,32 @@ angular.module('nearbyAdminApp')
 
       longitude: -77.0736607,
 
+      searchObject: "users",
+
+      searchObjects: ["users", "requests"],
+
+      radiusOptions: [{
+        name: "none - don't limit results by location",
+        radius: 0
+      }, {
+        name: "0.5 miles",
+        radius: 0.5
+      }, {
+        name: "1 mile",
+        radius: 1
+      }, {
+        name: "5 miles",
+        radius: 5
+      }, {
+        name: "10 miles",
+        radius: 10
+      }, {
+        name: "20 miles",
+        radius: 20
+      }],
+
+      selectedRadius: {},
+
       filters: {
         'createdStart': moment("01-01-2017 00:00").format('MM/DD/YYYY HH:MM'),
         'createdEnd': moment().format('MM/DD/YYYY HH:MM')
@@ -31,10 +57,23 @@ angular.module('nearbyAdminApp')
 
       showLeft: true,
 
+      showPagination: false,
+
+      pagination: {
+        page: 1,
+        limit: 20,
+        total: 0,
+        offset: 0
+      },
+
       getUsers: function(queryParams) {
         adminService.fetchUsers(queryParams)
           .then(function(response) {
             $scope.data.users = response.data;
+            $scope.data.pagination.total = response.headers('X-Total-Count');
+            if (!$scope.data.showPagination) {
+              $scope.data.showPagination = true;
+            }
           }, function(error) {
             //if unauthorized, go to login page
             if (error.status === 401) {
@@ -85,7 +124,6 @@ angular.module('nearbyAdminApp')
           window.setTimeout(function() {
             $scope.data.getFilterMap().then(function(map) {
               $scope.data.map = map;
-              console.log('here1*');
               $scope.data.mapLoaded = true;
               $scope.data.showMap = true;
               //$scope.$apply();
@@ -110,8 +148,15 @@ angular.module('nearbyAdminApp')
           queryParams.push('createdEnd=' + endDate);
         }
         var query = '';
+        queryParams.push('limit=' + $scope.data.pagination.limit);
+        queryParams.push('offset=' + $scope.data.pagination.offset);
         if (queryParams.length > 0) {
           query = '?' + queryParams.join('&');
+        }
+        if ($scope.data.selectedRadius.radius != 0 &&
+          $scope.data.latitude != undefined && $scope.data.longitude != undefined) {
+          var locationQuery = "&radius=" + $scope.data.selectedRadius.radius + "&longitude=" + $scope.data.longitude + "&latitude=" + $scope.data.latitude;
+          query += locationQuery;
         }
         $scope.data.getUsers(query);
       },
@@ -123,8 +168,25 @@ angular.module('nearbyAdminApp')
         user.expand = !user.expand;
       },
 
+      pageChanged: function() {
+        $scope.data.pagination.offset = ($scope.data.pagination.page - 1) * $scope.data.pagination.limit;
+        console.log($scope.data.pagination.offset);
+        $scope.data.filterUsers();
+      },
+
       init: function() {
-        $scope.data.getUsers("");
+        $scope.data.getUsers("?limit=" + $scope.data.pagination.limit + "&offset=" + $scope.data.pagination.offset);
+        $scope.data.selectedRadius = $scope.data.radiusOptions[0];
+        if ($scope.data.showLeft && !$scope.data.showMap) {
+          window.setTimeout(function() {
+            $scope.data.getFilterMap().then(function(map) {
+              $scope.data.map = map;
+              $scope.data.mapLoaded = true;
+              $scope.data.showMap = true;
+              //$scope.$apply();
+            });
+          }, 500);
+        }
       }
 
       //$scope.data.getFilterMap();

@@ -28,25 +28,46 @@ export function index(req, res) {
   var limit = 25;
   var offset = 0;
   if (req.param('limit') !== undefined && req.param('limit') < limit) {
-    limit = req.param('limit');
+    limit = parseInt(req.param('limit'));
   }
   if (req.param('offset') !== undefined && req.param('offset') >= 0) {
-    offset = req.param('offset');
+    offset = parseInt(req.param('offset'));
   }
-  if (queryParams.hasOwnProperty("createdStart")){
+  if (queryParams.hasOwnProperty("createdStart")) {
     createdStart = queryParams.createdStart;
   }
-  if (queryParams.hasOwnProperty("createdEnd")){
-      createdEnd = queryParams.createdEnd;
-    }
+  if (queryParams.hasOwnProperty("createdEnd")) {
+    createdEnd = queryParams.createdEnd;
+  }
+  var radius = req.param('radius');
+  var lng = req.param('longitude');
+  var lat = req.param('latitude');
 
   var mongoQuery = {};
+  if (radius != undefined && lng != undefined && lat != undefined) {
+    mongoQuery.homeLocation = {
+      "$near": {
+        "$geometry": {
+          "type": "Point",
+          "coordinates": [parseFloat(lng), parseFloat(lat)]
+        },
+        "$maxDistance": parseFloat(radius) * 1609.344
+      }
+    }
+  }
   if (createdStart !== undefined && createdEnd !== undefined) {
-    mongoQuery.createdDate = {"$gte": new Date(createdStart), "$lt": new Date(createdEnd)};
+    mongoQuery.createdDate = {
+      "$gte": new Date(createdStart),
+      "$lt": new Date(createdEnd)
+    };
   } else if (createdStart !== undefined) {
-    mongoQuery.createdDate = {"$gte": new Date(createdStart)};
+    mongoQuery.createdDate = {
+      "$gte": new Date(createdStart)
+    };
   } else if (createdEnd !== undefined) {
-    mongoQuery.createdDate = {"$lt": new Date(createdEnd)};
+    mongoQuery.createdDate = {
+      "$lt": new Date(createdEnd)
+    };
   }
 
   return User.find(mongoQuery)
@@ -54,9 +75,9 @@ export function index(req, res) {
     .skip(offset)
     .sort({
       createdDate: 'asc'
-     })
+    })
     .exec(function(err, users) {
-      User.count().exec(function(err, count) {
+      User.count(mongoQuery).exec(function(err, count) {
         res.header('X-Total-Count', count).status(200).json(users);
       })
     })
@@ -74,7 +95,7 @@ export function show(req, res, next) {
 
   return User.findById(userId).exec()
     .then(user => {
-      if(!user) {
+      if (!user) {
         return res.status(404).end();
       }
       res.json(user);
@@ -100,9 +121,11 @@ export function destroy(req, res) {
 export function me(req, res, next) {
   var userId = req.user._id;
 
-  return User.findOne({ _id: userId }, '-salt -password').exec()
+  return User.findOne({
+      _id: userId
+    }, '-salt -password').exec()
     .then(user => { // don't ever give out the password or salt
-      if(!user) {
+      if (!user) {
         return res.status(401).end();
       }
       res.json(user);
