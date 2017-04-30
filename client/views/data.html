@@ -65,36 +65,36 @@
       <li>
         <a href="#" class="object-header" ng-click="data.expandUser(user)" uib-tooltip="{{user._id}}">{{user.name}}</a>
         <div ng-show="user.expand" class="object-info">
-          <p><b>_id: </b>{{user._id}}</p>
-          <p><b>firstName: </b>{{user.firstName}}</p>
-          <p><b>lastName: </b>{{user.lastName}}</p>
-          <p><b>userId: </b>{{user.userId}}</p>
-          <p><b>fcmRegistrationId: </b>{{user.fcmRegistrationId}}</p>
-          <p><b>name: </b>{{user.name}}</p>
-          <p><b>email: </b>{{user.email}}</p>
-          <p><b>phone: </b>{{user.phone}}</p>
-          <p><b>address: </b>{{user.address}}</p>
-          <p><b>city: </b>{{user.city}}</p>
-          <p><b>state: </b>{{user.state}}</p>
-          <p><b>zip: </b>{{user.zip}}</p>
-          <p><b>homeLocation: </b>{{user.homeLocation}}</p>
-          <p><b>newRequestNotificationsEnabled: </b>{{user.newRequestNotificationsEnabled}}</p>
-          <p><b>notificationRadius: </b>{{user.notificationRadius}}</p>
-          <p><b>currentLocationNotifications: </b>{{user.currentLocationNotifications}}</p>
-          <p><b>homeLocationNotifications: </b>{{user.homeLocationNotifications}}</p>
-          <p><b>pictureUrl: </b>{{user.pictureUrl}}</p>
-          <p><b>customerId: </b>{{user.customerId}}</p>
-          <p><b>dateOfBirth: </b>{{user.dateOfBirth}}</p>
-          <p><b>tosAccepted: </b>{{user.tosAccepted}}</p>
-          <p><b>timeTosAccepted: </b>{{user.timeTosAccepted}}</p>
-          <p><b>tosAcceptIp: </b>{{user.tosAcceptIp}}</p>
-          <p><b>stripeManagedAccountId: </b>{{user.stripeManagedAccountId}}</p>
-          <p><b>stripeCustomerId: </b>{{user.stripeCustomerId}}</p>
-          <p><b>stripeSecretKey: </b>{{user.stripeSecretKey}}</p>
-          <p><b>stripePublishableKey: </b>{{user.stripePublishableKey}}</p>
-          <p><b>userAgent: </b>{{user.userAgent}}</p>
-          <p><b>authMethod: </b>{{user.authMethod}}</p>
-          <p><b>createdDate: </b>{{user.createdDate}}</p>
+          <p ng-if="user._id != undefined"><b>_id: </b>{{user._id}}</p>
+          <p ng-if="user.firstName != undefined"><b>firstName: </b>{{user.firstName}}</p>
+          <p ng-if="user.lastName != undefined"><b>lastName: </b>{{user.lastName}}</p>
+          <p ng-if="user.userId != undefined"><b>userId: </b>{{user.userId}}</p>
+          <p ng-if="user.fcmRegistrationId != undefined"><b>fcmRegistrationId: </b>{{user.fcmRegistrationId}}</p>
+          <p ng-if="user.name != undefined"><b>name: </b>{{user.name}}</p>
+          <p ng-if="user.email != undefined"><b>email: </b>{{user.email}}</p>
+          <p ng-if="user.phone != undefined"><b>phone: </b>{{user.phone}}</p>
+          <p ng-if="user.address != undefined"><b>address: </b>{{user.address}}</p>
+          <p ng-if="user.city != undefined"><b>city: </b>{{user.city}}</p>
+          <p ng-if="user.state != undefined"><b>state: </b>{{user.state}}</p>
+          <p ng-if="user.zip != undefined"><b>zip: </b>{{user.zip}}</p>
+          <p ng-if="user.homeLocation != undefined"><b>homeLocation: </b>{{user.homeLocation}}</p>
+          <p ng-if="user.newRequestNotificationsEnabled != undefined"><b>newRequestNotificationsEnabled: </b>{{user.newRequestNotificationsEnabled}}</p>
+          <p ng-if="user.notificationRadius != undefined"><b>notificationRadius: </b>{{user.notificationRadius}}</p>
+          <p ng-if="user.currentLocationNotifications != undefined"><b>currentLocationNotifications: </b>{{user.currentLocationNotifications}}</p>
+          <p ng-if="user.homeLocationNotifications != undefined"><b>homeLocationNotifications: </b>{{user.homeLocationNotifications}}</p>
+          <p ng-if="user.pictureUrl != undefined"><b>pictureUrl: </b>{{user.pictureUrl}}</p>
+          <p ng-if="user.customerId != undefined"><b>customerId: </b>{{user.customerId}}</p>
+          <p ng-if="user.dateOfBirth != undefined"><b>dateOfBirth: </b>{{user.dateOfBirth}}</p>
+          <p ng-if="user.tosAccepted != undefined"><b>tosAccepted: </b>{{user.tosAccepted}}</p>
+          <p ng-if="user.timeTosAccepted != undefined"><b>timeTosAccepted: </b>{{user.timeTosAccepted}}</p>
+          <p ng-if="user.tosAcceptIp != undefined"><b>tosAcceptIp: </b>{{user.tosAcceptIp}}</p>
+          <p ng-if="user.stripeManagedAccountId != undefined"><b>stripeManagedAccountId: </b>{{user.stripeManagedAccountId}}</p>
+          <p ng-if="user.stripeCustomerId != undefined"><b>stripeCustomerId: </b>{{user.stripeCustomerId}}</p>
+          <p ng-if="user.stripeSecretKey != undefined"><b>stripeSecretKey: </b>{{user.stripeSecretKey}}</p>
+          <p ng-if="user.stripePublishableKey != undefined"><b>stripePublishableKey: </b>{{user.stripePublishableKey}}</p>
+          <p ng-if="user.userAgent != undefined"><b>userAgent: </b>{{user.userAgent}}</p>
+          <p ng-if="user.authMethod != undefined"><b>authMethod: </b>{{user.authMethod}}</p>
+          <p ng-if="user.createdDate != undefined"><b>createdDate: </b>{{user.createdDate}}</p>
         </div>
       </li>
     </ul>
