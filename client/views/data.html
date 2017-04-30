@@ -1,7 +1,11 @@
 <div>
   <pageslide ps-open="data.showLeft" ps-side="left" ps-class="left-panel" ps-size="350px" ps-click-outside="false">
     <div>
-      <p><span ng-click="data.toggleLeft()" class="close-panel-btn glyphicon glyphicon-remove"></span></p>
+      <p>
+        <!--<span ng-click="data.toggleLeft()" class="close-panel-btn glyphicon glyphicon-remove"></span>-->
+        <!--<i class="fa fa-times close-panel-btn" aria-hidden="true" ng-click="data.toggleLeft()"></i>-->
+
+      </p>
       <div class="filters col-lg-12">
         <div class="filter-section-header">CREATED DATE</div>
         <div class="date-filter filter-body">
@@ -33,36 +37,30 @@
         <div class="">
         </div>
         <div class="margin-top-30">
-          <button class="btn" ng-click="data.filterUsers()">filter</button>
+          <button class="btn filters-btn" ng-click="data.filterUsers()">filter</button>
         </div>
       </div>
     </div>
   </pageslide>
 
-  <nav class="hero-unit" id="banner" ng-class="{ 'margin-left-350': data.showLeft}">
-    <div>
-      <ul>
-        <li class="filter-btn">
-          <i class="fa fa-filter" aria-hidden="true" ng-click="data.toggleLeft()"></i>
-        </li>
-        <li>Nearby Admin</li>
-      </ul>
-
-    </div>
+  <nav class="hero-unit" ng-class="{ 'margin-left-350': data.showLeft}">
+    <div class="col-md-2 max-width-50"><i class="fa fa-filter fa-lg float-left filter-btn" ng-click="data.toggleLeft()"></i></div>
+    <div class="col-md-10 text-left nearby-admin">Nearby Admin</div>
   </nav>
 
-  <div class="container-first" ng-class="{ 'margin-left-350': data.showLeft}">
+  <div class="container-first data-container" ng-class="{ 'margin-left-350': data.showLeft}">
     <div class="row col-md-6 col-lg-6 col-sm-6 object-picker">
+      Select Object:
       <select class="" ng-model="data.searchObject">
         <option ng-repeat="object in data.searchObjects">{{object}}</option>
       </select>
       <!--<div class="page-header">USERS</div>-->
     </div>
-    <div class="row col-md-6 col-lg-6 col-sm-6">
+    <div class="row col-md-6 col-lg-6 col-sm-6 text-right">
       <ul uib-pagination total-items="data.pagination.total" ng-model="data.pagination.page" ng-change="data.pageChanged()" items-per-page="data.pagination.limit"></ul>
     </div>
   </div>
-  <div class="container" ng-class="{ 'margin-left-350': data.showLeft}">
+  <div class="data-container" ng-class="{ 'margin-left-350': data.showLeft}">
     <ul class="nav nav-tabs" ng-repeat="user in data.users">
       <li>
         <a href="#" class="object-header" ng-click="data.expandUser(user)" uib-tooltip="{{user._id}}">{{user.name}}</a>
@@ -100,5 +98,8 @@
         </div>
       </li>
     </ul>
+    <div class="col-md-12 float-left table-footer">
+      Displaying {{data.pagination.offset + 1}}-{{data.pagination.offset + data.pagination.limit}} of {{data.pagination.total}}
+    </div>
   </div>
 </div>
