@@ -5,6 +5,8 @@ angular.module('nearbyAdminApp')
     $scope.data = {
       users: [],
 
+      requests: [],
+
       showFilters: false,
 
       filtersText: 'show filters',
@@ -21,6 +23,12 @@ angular.module('nearbyAdminApp')
       searchObject: "users",
 
       searchObjects: ["users", "requests"],
+
+      loading: false,
+
+      requestStatus: ['ALL', 'OPEN', 'CLOSED', 'TRANSACTION_PENDING', 'PROCESSING_PAYMENT', 'FULFILLED'],
+
+      selectedRequestStatus: 'ALL',
 
       radiusOptions: [{
         name: "none - don't limit results by location",
@@ -67,6 +75,7 @@ angular.module('nearbyAdminApp')
       },
 
       getUsers: function(queryParams) {
+        $scope.data.loading = true;
         adminService.fetchUsers(queryParams)
           .then(function(response) {
             $scope.data.users = response.data;
@@ -74,7 +83,28 @@ angular.module('nearbyAdminApp')
             if (!$scope.data.showPagination) {
               $scope.data.showPagination = true;
             }
+            $scope.data.loading = false;
           }, function(error) {
+            $scope.data.loading = false;
+            //if unauthorized, go to login page
+            if (error.status === 401) {
+              $state.go('login');
+            }
+          })
+      },
+
+      getRequests: function(queryParams) {
+        $scope.data.loading = true;
+        adminService.fetchRequests(queryParams)
+          .then(function(response) {
+            $scope.data.requests = response.data;
+            $scope.data.pagination.total = response.headers('X-Total-Count');
+            if (!$scope.data.showPagination) {
+              $scope.data.showPagination = true;
+            }
+            $scope.data.loading = false;
+          }, function(error) {
+            $scope.data.loading = false;
             //if unauthorized, go to login page
             if (error.status === 401) {
               $state.go('login');
@@ -137,7 +167,7 @@ angular.module('nearbyAdminApp')
         }
       },
 
-      filterUsers: function() {
+      filterObjects: function() {
         var startDate = moment($scope.data.filters.createdStart).toDate();
         var endDate = moment($scope.data.filters.createdEnd).toDate();
         var queryParams = [];
@@ -158,20 +188,36 @@ angular.module('nearbyAdminApp')
           var locationQuery = "&radius=" + $scope.data.selectedRadius.radius + "&longitude=" + $scope.data.longitude + "&latitude=" + $scope.data.latitude;
           query += locationQuery;
         }
-        $scope.data.getUsers(query);
+        if ($scope.data.searchObject === 'users') {
+          $scope.data.getUsers(query);
+        } else if ($scope.data.searchObject === 'requests') {
+          if ($scope.data.selectedRequestStatus !== undefined && $scope.data.selectedRequestStatus !== 'ALL') {
+            var statusQuery = "&status=" + $scope.data.selectedRequestStatus;
+            query += statusQuery;
+          }
+          $scope.data.getRequests(query);
+        }
       },
 
-      expandUser: function(user) {
-        if (user.expand === undefined) {
-          user.expand = false;
+      expandObject: function(obj) {
+        if (obj.expand === undefined) {
+          obj.expand = false;
         }
-        user.expand = !user.expand;
+        obj.expand = !obj.expand;
       },
 
       pageChanged: function() {
         $scope.data.pagination.offset = ($scope.data.pagination.page - 1) * $scope.data.pagination.limit;
-        console.log($scope.data.pagination.offset);
-        $scope.data.filterUsers();
+        $scope.data.filterObjects();
+      },
+
+      fetchObject: function() {
+        $scope.data.loading = true;
+        $scope.data.pagination.offset = 0;
+        $scope.data.selectedRadius = $scope.data.radiusOptions[0];
+        $scope.data.filters.createdStart = moment("01-01-2017 00:00").format('MM/DD/YYYY HH:MM');
+        $scope.data.filters.createdEnd = moment().format('MM/DD/YYYY HH:MM');
+        $scope.data.filterObjects();
       },
 
       init: function() {

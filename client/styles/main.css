@@ -229,3 +229,13 @@
 .nav-tabs>li>a {
   color: #777777;
 }
+
+.spinner {
+  text-align: center;
+  margin-left: 125px;
+  color: #4EE2EC;
+}
+
+.row-expanded {
+  background-color: #eee;
+}

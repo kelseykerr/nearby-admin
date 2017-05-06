@@ -11,6 +11,13 @@ angular.module('nearbyAdminApp')
         });
       },
 
+      fetchRequests: function(queryParams) {
+        return $http({
+          method: 'GET',
+          url: '/api/requests' + (queryParams !== undefined ? queryParams : '')
+        });
+      },
+
       signIn: function(email, password) {
         return $http({
           method: 'POST',

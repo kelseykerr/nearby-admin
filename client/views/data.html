@@ -34,10 +34,15 @@
           <select class="form-control nav-input" ng-options="option.name for option in data.radiusOptions" ng-model="data.selectedRadius"></select>
         </div>
 
+        <div ng-if="data.searchObject === 'requests'" class="filter-section-header">STATUS</div>
+
+        <div ng-if="data.searchObject === 'requests'" class="form-group form-group-md margin-top-10">
+          <select class="form-control nav-input" ng-options="option for option in data.requestStatus" ng-model="data.selectedRequestStatus"></select>
+        </div>
         <div class="">
         </div>
         <div class="margin-top-30">
-          <button class="btn filters-btn" ng-click="data.filterUsers()">filter</button>
+          <button class="btn filters-btn" ng-click="data.filterObjects()">filter</button>
         </div>
       </div>
     </div>
@@ -51,19 +56,21 @@
   <div class="container-first data-container" ng-class="{ 'margin-left-350': data.showLeft}">
     <div class="row col-md-6 col-lg-6 col-sm-6 object-picker">
       Select Object:
-      <select class="" ng-model="data.searchObject">
+      <select ng-change="data.fetchObject()" class="" ng-model="data.searchObject">
         <option ng-repeat="object in data.searchObjects">{{object}}</option>
       </select>
-      <!--<div class="page-header">USERS</div>-->
     </div>
-    <div class="row col-md-6 col-lg-6 col-sm-6 text-right">
+    <div ng-if="!data.loading" class="row col-md-6 col-lg-6 col-sm-6 text-right">
       <ul uib-pagination total-items="data.pagination.total" ng-model="data.pagination.page" ng-change="data.pageChanged()" items-per-page="data.pagination.limit"></ul>
     </div>
   </div>
-  <div class="data-container" ng-class="{ 'margin-left-350': data.showLeft}">
-    <ul class="nav nav-tabs" ng-repeat="user in data.users">
+  <div ng-if="data.loading" class="col-md-12 col-lg-12 col-sm-12 spinner">
+    <i class="fa fa-spinner fa-spin fa-3x"></i>
+  </div>
+  <div ng-if="!data.loading" class="data-container" ng-class="{ 'margin-left-350': data.showLeft}">
+    <ul ng-if="data.searchObject === 'users'" class="nav nav-tabs" ng-repeat="user in data.users">
       <li>
-        <a href="#" class="object-header" ng-click="data.expandUser(user)" uib-tooltip="{{user._id}}">{{user.name}}</a>
+        <a href="#" class="object-header" ng-click="data.expandObject(user)" uib-tooltip="{{user._id}}">{{user.name}}</a>
         <div ng-show="user.expand" class="object-info">
           <p ng-if="user._id != undefined"><b>_id: </b>{{user._id}}</p>
           <p ng-if="user.firstName != undefined"><b>firstName: </b>{{user.firstName}}</p>
@@ -98,6 +105,23 @@
         </div>
       </li>
     </ul>
+    <ul ng-if="data.searchObject === 'requests'" class="nav nav-tabs" ng-repeat="request in data.requests">
+      <li>
+        <a href="#" ng-class="{ 'row-expanded': request.expanded}" class="object-header" ng-click="data.expandObject(request)" uib-tooltip="{{request._id}}">{{request.itemName}}</a>
+        <div ng-show="request.expand" class="object-info">
+          <p ng-if="request._id != undefined"><b>_id: </b>{{request._id}}</p>
+          <p><b>itemName: </b>{{request.itemName}}</p>
+          <p><b>description: </b>{{request.description}}</p>
+          <p><b>status: </b>{{request.status}}</p>
+          <p><b>rental: </b>{{request.rental}}</p>
+          <p><b>postDate: </b>{{request.postDate}}</p>
+          <p ng-if="request.expireDate != undefined"><b>expireDate: </b>{{request.expireDate}}</p>
+          <p><b>location: </b>{{request.location}}</p>
+          <p><b>user: </b>{{request.user}}</p>
+        </div>
+      </li>
+    </ul>
+
     <div class="col-md-12 float-left table-footer">
       Displaying {{data.pagination.offset + 1}}-{{data.pagination.offset + data.pagination.limit}} of {{data.pagination.total}}
     </div>
