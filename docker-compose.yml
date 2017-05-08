@@ -1,0 +1,8 @@
+version: '2'
+services:
+  nearby-admin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
