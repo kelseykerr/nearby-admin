@@ -1,0 +1,29 @@
+<div>
+  <table class="flag-table" ng-if="flagsTable.showTable">
+    <tr>
+      <th>Reported Date</th>
+      <th>Status</th>
+      <th>Reviewer Notes</th>
+      <th>Reviewed Date</th>
+    </tr>
+    <tr ng-repeat="flag in flags" ng-click="flagsTable.getDetail(flag)">
+      <td>{{ flagsTable.formatDate(flag.reportedDate) }}</td>
+      <td>{{ flag.status }}</td>
+      <td>{{ flag.reviewerNotes }}</td>
+      <td>{{ flagsTable.formatDate(flag.dateReviewed) }}</td>
+    </tr>
+  </table>
+
+  <div ng-if="!flagsTable.showTable">
+    <div class="flag-form-header col-md-12">{{type}} flag detail</div>
+    <form class="flag-detail-form">
+      <div class="form-group col-md-4 margin-top-10">
+        <label for="id">ID</label>
+        <input type="text" class="form-control" disabled=true id="id" ng-model="flagsTable.userFlagDetail._id">
+      </div>
+      <div class="form-group col-md-4 margin-top-10">
+        <label for="reportedDate">Reported Date</label>
+        <div class="form-control" id="reportedDate">{{flagsTable.formatDate(flagsTable.userFlagDetail.reportedDate)}}</div </div>
+    </form>
+    </div>
+  </div>

@@ -18,6 +18,20 @@ angular.module('nearbyAdminApp')
         });
       },
 
+      fetchUserFlags: function(queryParams) {
+        return $http({
+          method: 'GET',
+          url: '/api/users/flags' + (queryParams !== undefined ? queryParams : '')
+        });
+      },
+
+      getUserFlag: function(id) {
+        return $http({
+          method: 'GET',
+          url: '/api/users/flags/' + id
+        });
+      },
+
       signIn: function(email, password) {
         return $http({
           method: 'POST',

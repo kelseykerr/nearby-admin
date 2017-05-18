@@ -14,30 +14,33 @@
         <div class="date-filter filter-body">
           <div moment-picker="data.filters.createdEnd" format="MM-DD-YYYY HH:mm">END: <b class="blue-underline"> {{ data.filters.createdEnd }}</b></div>
         </div>
-        <div class="filter-section-header">LOCATION</div>
-        <div class="margin-top-10" ng-if="data.mapLoaded">
+        <div ng-if="data.hasSearchByLocation()" class="filter-section-header">LOCATION</div>
+        <div class="margin-top-10" ng-if="data.mapLoaded && data.hasSearchByLocation()">
           <ui-gmap-google-map center="data.map.center" zoom="data.map.zoom" draggable="true" events="data.map.events" options="data.map.options">
             <ui-gmap-marker coords="data.map.marker.coords" icon="data.map.marker.icon" idkey="data.map.marker.id"></ui-gmap-marker>
           </ui-gmap-google-map>
         </div>
-        <div class="form-group form-group-md">
+        <div ng-if="data.hasSearchByLocation()" class="form-group form-group-md">
           <div class="panel-label text-uppercase">latitude</div>
           <input type="text" class="form-control nav-input" ng-model="data.latitude" disabled/>
         </div>
-        <div class="form-group form-group-md">
+        <div ng-if="data.hasSearchByLocation()" class="form-group form-group-md">
           <div class="panel-label text-uppercase">longitude</div>
           <input type="text" class="form-control nav-input" ng-model="data.longitude" disabled/>
         </div>
 
-        <div id="bottom" class="form-group form-group-md">
+        <div ng-if="data.hasSearchByLocation()" id="bottom" class="form-group form-group-md">
           <div class="panel-label text-uppercase">proximity</div>
           <select class="form-control nav-input" ng-options="option.name for option in data.radiusOptions" ng-model="data.selectedRadius"></select>
         </div>
 
-        <div ng-if="data.searchObject === 'requests'" class="filter-section-header">STATUS</div>
+        <div ng-if="data.searchObject !== 'users'" class="filter-section-header">STATUS</div>
 
         <div ng-if="data.searchObject === 'requests'" class="form-group form-group-md margin-top-10">
           <select class="form-control nav-input" ng-options="option for option in data.requestStatus" ng-model="data.selectedRequestStatus"></select>
+        </div>
+        <div ng-if="data.isFlagSearch()" class="form-group form-group-md margin-top-10">
+          <select class="form-control nav-input" ng-options="option for option in data.flagStatus" ng-model="data.selectedFlagStatus"></select>
         </div>
         <div class="">
         </div>
@@ -121,9 +124,9 @@
         </div>
       </li>
     </ul>
-
+    <div ng-if="data.isFlagSearch()" flag-table type={{data.getFlagType()}} flags=data.flags></div>
     <div class="col-md-12 float-left table-footer">
-      Displaying {{data.pagination.offset + 1}}-{{data.pagination.offset + data.pagination.limit}} of {{data.pagination.total}}
+      Displaying {{data.pagination.offset + 1}}-{{data.getPaginationEnd()}} of {{data.pagination.total}}
     </div>
   </div>
 </div>

@@ -239,3 +239,42 @@
 .row-expanded {
   background-color: #eee;
 }
+
+.flag-table {
+  color: #777777;
+  font-family: Verdana, Geneva, sans-serif
+}
+
+table.flag-table th {
+  background-color: #b3b3b3;
+  color: #ffffff;
+  font-weight: normal;
+}
+
+table.flag-table td {
+  cursor: pointer;
+}
+
+table.flag-table td:hover {}
+
+table.flag-table tr:hover {
+  background-color: rgba(179, 179, 179, 0.4);
+}
+
+table.flag-table th, table.flag-table td {
+  padding: 10px;
+  border: 1px solid #777777;
+}
+
+.flag-form-header {
+  border-bottom: 1px solid #b3b3b3;
+  margin-top: 10px;
+  color: #777777;
+  font-size: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.flag-detail-form {
+  font-family: Verdana, Geneva, sans-serif;
+  color: #777777;
+}

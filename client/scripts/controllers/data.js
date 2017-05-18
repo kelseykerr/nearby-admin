@@ -7,6 +7,8 @@ angular.module('nearbyAdminApp')
 
       requests: [],
 
+      flags: [],
+
       showFilters: false,
 
       filtersText: 'show filters',
@@ -22,13 +24,17 @@ angular.module('nearbyAdminApp')
 
       searchObject: "users",
 
-      searchObjects: ["users", "requests"],
+      searchObjects: ["users", "requests", "user-flags", "request-flags", "response-flags"],
 
       loading: false,
 
       requestStatus: ['ALL', 'OPEN', 'CLOSED', 'TRANSACTION_PENDING', 'PROCESSING_PAYMENT', 'FULFILLED'],
 
+      flagStatus: ['ALL', 'PENDING', 'INAPPROPRIATE', 'DISMISSED'],
+
       selectedRequestStatus: 'ALL',
+
+      selectedFlagStatus: 'ALL',
 
       radiusOptions: [{
         name: "none - don't limit results by location",
@@ -74,6 +80,36 @@ angular.module('nearbyAdminApp')
         offset: 0
       },
 
+      getPaginationEnd: function() {
+        var maxEnd = $scope.data.pagination.offset + $scope.data.pagination.limit;
+        return $scope.data.pagination.total < maxEnd ? $scope.data.pagination.total : maxEnd;
+      },
+
+      hasSearchByLocation: function() {
+        return $scope.data.searchObject === 'requests' || $scope.data.searchObject === 'users';
+      },
+
+      isFlagSearch: function() {
+        return $scope.data.searchObject === 'user-flags' ||
+          $scope.data.searchObject === 'request-flags' ||
+          $scope.data.searchObject === 'response-flags';
+      },
+
+      getFlagType: function() {
+        if (!$scope.data.isFlagSearch()) {
+          return '';
+        } else {
+          switch ($scope.data.searchObject) {
+            case 'user-flags':
+              return 'user';
+            case 'request-flags':
+              return 'request';
+            case 'response-flags':
+              return 'response';
+          }
+        }
+      },
+
       getUsers: function(queryParams) {
         $scope.data.loading = true;
         adminService.fetchUsers(queryParams)
@@ -98,6 +134,25 @@ angular.module('nearbyAdminApp')
         adminService.fetchRequests(queryParams)
           .then(function(response) {
             $scope.data.requests = response.data;
+            $scope.data.pagination.total = response.headers('X-Total-Count');
+            if (!$scope.data.showPagination) {
+              $scope.data.showPagination = true;
+            }
+            $scope.data.loading = false;
+          }, function(error) {
+            $scope.data.loading = false;
+            //if unauthorized, go to login page
+            if (error.status === 401) {
+              $state.go('login');
+            }
+          })
+      },
+
+      getFlags: function(queryParams, type) {
+        $scope.data.loading = true;
+        adminService.fetchUserFlags(queryParams)
+          .then(function(response) {
+            $scope.data.flags = response.data;
             $scope.data.pagination.total = response.headers('X-Total-Count');
             if (!$scope.data.showPagination) {
               $scope.data.showPagination = true;
@@ -183,7 +238,7 @@ angular.module('nearbyAdminApp')
         if (queryParams.length > 0) {
           query = '?' + queryParams.join('&');
         }
-        if ($scope.data.selectedRadius.radius != 0 &&
+        if ($scope.data.hasSearchByLocation() && $scope.data.selectedRadius.radius != 0 &&
           $scope.data.latitude != undefined && $scope.data.longitude != undefined) {
           var locationQuery = "&radius=" + $scope.data.selectedRadius.radius + "&longitude=" + $scope.data.longitude + "&latitude=" + $scope.data.latitude;
           query += locationQuery;
@@ -196,6 +251,12 @@ angular.module('nearbyAdminApp')
             query += statusQuery;
           }
           $scope.data.getRequests(query);
+        } else {
+          if ($scope.data.selectedFlagStatus !== undefined && $scope.data.selectedFlagStatus !== 'ALL') {
+            var statusQuery = "&status=" + $scope.data.selectedFlagStatus;
+            query += statusQuery;
+          }
+          $scope.data.getFlags(query, 'user');
         }
       },
 
