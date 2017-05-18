@@ -134,11 +134,11 @@ export function update(req, res) {
   req.newData = {};
   if (userFlagBody.status !== undefined) {
     req.newData.status = userFlagBody.status.toUpperCase();
-  } else if (userFlagBody.reviewerNotes !== undefined) {
-    req.newData.reviewerNotes = userFlagBody.reviewerNotes;
-    request.newData.reviewedDate = new Date();
   }
-
+  if (userFlagBody.reviewerNotes !== undefined) {
+    req.newData.reviewerNotes = userFlagBody.reviewerNotes;
+    req.newData.reviewedDate = new Date();
+  }
   UserFlag.findOneAndUpdate(query, req.newData, {
     upsert: false
   }, function(err, doc) {

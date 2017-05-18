@@ -124,7 +124,7 @@
         </div>
       </li>
     </ul>
-    <div ng-if="data.isFlagSearch()" flag-table type={{data.getFlagType()}} flags=data.flags></div>
+    <div ng-if="data.isFlagSearch()" flag-table type={{data.getFlagType()}} flags=data.flags filter=data.filterObjects()></div>
     <div class="col-md-12 float-left table-footer">
       Displaying {{data.pagination.offset + 1}}-{{data.getPaginationEnd()}} of {{data.pagination.total}}
     </div>

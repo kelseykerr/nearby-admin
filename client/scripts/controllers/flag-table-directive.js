@@ -5,12 +5,15 @@ angular.module('nearbyAdminApp')
     return {
       scope: {
         flags: '=',
-        type: '@' //can be user, request, or response
+        type: '@', //can be user, request, or response
+        filter: '&'
       },
 
       link: function($scope) {
 
         $scope.flagsTable = {
+
+          statusOptions: ['PENDING', 'INAPPROPRIATE', 'DISMISSED'],
 
           showTable: true,
 
@@ -34,6 +37,9 @@ angular.module('nearbyAdminApp')
           getUserDetail: function(userFlag) {
             $scope.flagsTable.showTable = false;
             adminService.getUserFlag(userFlag._id).then(function(response) {
+              if (response.data.reviewerNotes === undefined) {
+                response.data.reviewerNotes = "";
+              }
               $scope.flagsTable.userFlagDetail = response.data;
             }, function(error) {
               cosole.log(error);
@@ -41,11 +47,21 @@ angular.module('nearbyAdminApp')
           },
 
           getDetail: function(flag) {
-            console.log($scope.type);
             if ($scope.type === 'user') {
               $scope.flagsTable.getUserDetail(flag);
             }
+          },
 
+          saveFlag: function(flag) {
+            console.log(flag.reviewerNotes);
+            if ($scope.type === 'user') {
+              adminService.saveUserFlag(flag).then(function(response) {
+                $scope.filter();
+                $scope.flagsTable.showTable = true;
+              }, function(error) {
+                cosole.log(error);
+              })
+            }
           }
         }
 

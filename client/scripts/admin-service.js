@@ -25,6 +25,14 @@ angular.module('nearbyAdminApp')
         });
       },
 
+      saveUserFlag: function(userFlag) {
+        return $http({
+          method: 'PUT',
+          url: '/api/users/flags/' + userFlag._id,
+          data: userFlag
+        });
+      },
+
       getUserFlag: function(id) {
         return $http({
           method: 'GET',

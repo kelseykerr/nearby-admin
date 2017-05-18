@@ -6,7 +6,10 @@ import mongoose, {
   Schema
 } from 'mongoose';
 
-var UserFlagSchema = new Schema({}, {
+var UserFlagSchema = new Schema({
+  reviewerNotes: String,
+  reviewedDate: Date
+}, {
   strict: false,
   collection: 'userFlag'
 });

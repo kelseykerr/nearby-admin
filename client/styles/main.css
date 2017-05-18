@@ -270,11 +270,59 @@ table.flag-table th, table.flag-table td {
   border-bottom: 1px solid #b3b3b3;
   margin-top: 10px;
   color: #777777;
+  text-transform: uppercase;
   font-size: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+
+.nested-form-header {
+  border-bottom: 1px solid #b3b3b3;
+  color: #777777;
+  text-transform: uppercase;
+  margin: 10px;
+  font-size: 14px;
   font-family: Verdana, Geneva, sans-serif;
 }
 
 .flag-detail-form {
   font-family: Verdana, Geneva, sans-serif;
   color: #777777;
+}
+
+.textarea {
+  width: 100%;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #777777;
+}
+
+.disabled-textarea {
+  width: 100%;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #555;
+  background-color: #eee;
+  opacity: 1;
+}
+
+.blue-btn {
+  background-color: #4EE2EC;
+  color: #ffffff;
+  margin-left: 10px;
+}
+
+.blue-btn:hover {
+  color: #ffffff !important;
+}
+
+.white-btn {
+  background-color: #ffffff;
+  color: #4EE2EC;
+  border: 1px solid #4EE2EC !important;
+}
+
+.white-btn:hover {
+  color: #4EE2EC !important;
+}
+
+.detail-form {
+  max-width: 1100px;
 }
