@@ -25,6 +25,13 @@ angular.module('nearbyAdminApp')
         });
       },
 
+      fetchRequestFlags: function(queryParams) {
+        return $http({
+          method: 'GET',
+          url: '/api/requests/flags' + (queryParams !== undefined ? queryParams : '')
+        });
+      },
+
       saveUserFlag: function(userFlag) {
         return $http({
           method: 'PUT',
@@ -33,10 +40,25 @@ angular.module('nearbyAdminApp')
         });
       },
 
+      saveRequestFlag: function(reqFlag) {
+        return $http({
+          method: 'PUT',
+          url: '/api/requests/flags/' + reqFlag._id,
+          data: reqFlag
+        });
+      },
+
       getUserFlag: function(id) {
         return $http({
           method: 'GET',
           url: '/api/users/flags/' + id
+        });
+      },
+
+      getRequestFlag: function(id) {
+        return $http({
+          method: 'GET',
+          url: '/api/requests/flags/' + id
         });
       },
 

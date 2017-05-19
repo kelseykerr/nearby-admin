@@ -18,21 +18,23 @@
 
   <div ng-if="!flagsTable.showTable" class="detail-form">
     <div class="flag-form-header col-md-12">{{type}} flag detail</div>
-    <form class="flag-detail-form">
-      <div class="form-group col-md-4 margin-top-10">
-        <label for="id">ID</label>
-        <input type="text" class="form-control" disabled=true id="id" ng-model="flagsTable.userFlagDetail._id">
-      </div>
-      <div class="form-group col-md-4 margin-top-10">
-        <label for="reportedDate">Reported Date</label>
-        <div class="form-control" disabled=true id="reportedDate">{{flagsTable.formatDate(flagsTable.userFlagDetail.reportedDate)}}</div>
-      </div>
-      <div class="form-group col-md-12" ng-if="flagsTable.userFlagDetail.reporterNotes != undefined">
-        <label for="reporterNotes">Reporter Notes</label>
-        <textarea class="disabled-textarea" disabled=true id="reporterNotes" rows="3" type="text">{{flagsTable.userFlagDetail.reporterNotes}}</textarea>
-      </div>
-      <div class="nested-form-header col-md-12 ">Blocked User Information</div>
-      <form>
+
+    <div ng-switch="type">
+      <!--form for user flags-->
+      <form class="flag-detail-form" ng-switch-when="user">
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="id">ID</label>
+          <input type="text" class="form-control" disabled=true id="id" ng-model="flagsTable.userFlagDetail._id">
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="reportedDate">Reported Date</label>
+          <div class="form-control" disabled=true id="reportedDate">{{flagsTable.formatDate(flagsTable.userFlagDetail.reportedDate)}}</div>
+        </div>
+        <div class="form-group col-md-12" ng-if="flagsTable.userFlagDetail.reporterNotes != undefined">
+          <label for="reporterNotes">Reporter Notes</label>
+          <textarea class="disabled-textarea" disabled=true id="reporterNotes" rows="3" type="text">{{flagsTable.userFlagDetail.reporterNotes}}</textarea>
+        </div>
+        <div class="nested-form-header col-md-12 ">Blocked User Information</div>
         <div class="form-group col-md-4 ">
           <label for="id ">ID</label>
           <div class="form-control " disabled=true id="id ">{{flagsTable.userFlagDetail.user._id}}</div>
@@ -57,9 +59,7 @@
           <label for="state ">State</label>
           <div class="form-control " disabled=true id="State ">{{flagsTable.userFlagDetail.user.state}}</div>
         </div>
-      </form>
-      <div class="nested-form-header col-md-12 ">Reporter Information</div>
-      <form>
+        <div class="nested-form-header col-md-12 ">Reporter Information</div>
         <div class="form-group col-md-4 ">
           <label for="id ">ID</label>
           <div class="form-control " disabled=true id="id ">{{flagsTable.userFlagDetail.reporter._id}}</div>
@@ -87,19 +87,92 @@
         <div class="form-group col-md-4 margin-top-10">
           <label for="status">Status</label>
           <select id="status" class="form-control form-control-lg" ng-model="flagsTable.userFlagDetail.status">
-            <option value="PENDING">PENDING</option>
-            <option value="INAPPROPRIATE">INAPPROPRIATE</option>
-            <option value="DISMISSED">DISMISSED</option>
-          </select>
+              <option value="PENDING">PENDING</option>
+              <option value="INAPPROPRIATE">INAPPROPRIATE</option>
+              <option value="DISMISSED">DISMISSED</option>
+            </select>
         </div>
         <div class="form-group col-md-12">
           <label for="reviewerNotes">Reviewer Notes</label>
           <textarea class="textarea" id="reviewerNotes" rows="3" type="text" ng-model="flagsTable.userFlagDetail.reviewerNotes"></textarea>
         </div>
       </form>
-    </form>
+
+      <!--form for request flags-->
+      <form class="flag-detail-form" ng-switch-when="request">
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="id">ID</label>
+          <input type="text" class="form-control" disabled=true id="id" ng-model="flagsTable.requestFlagDetail._id">
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="reportedDate">Reported Date</label>
+          <div class="form-control" disabled=true id="reportedDate">{{flagsTable.formatDate(flagsTable.requestFlagDetail.reportedDate)}}</div>
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="requestDate">Request Post Date</label>
+          <div class="form-control" disabled=true id="requestDate">{{flagsTable.formatDate(flagsTable.requestFlagDetail.request.postDate)}}</div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="itemName">Item Requested</label>
+          <div class="form-control" disabled=true id="itemName">{{flagsTable.requestFlagDetail.request.itemName}}</div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="rentBuy">Rent or Buy</label>
+          <div class="form-control" disabled=true id="rentBuy">{{flagsTable.requestFlagDetail.request.rental ? 'rent' : 'buy'}}</div>
+        </div>
+        <div class="form-group col-md-12" ng-if="flagsTable.requestFlagDetail.request.description !== undefined">
+          <label for="description">Request Description</label>
+          <div class="form-control" disabled=true id="description">{{flagsTable.requestFlagDetail.request.description}}</div>
+        </div>
+        <div class="nested-form-header col-md-12 ">Requester Information</div>
+        <div class="form-group col-md-4 ">
+          <label for="id ">ID</label>
+          <div class="form-control " disabled=true id="id ">{{flagsTable.requestFlagDetail.request.user._id}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="firstname ">Firstname</label>
+          <div class="form-control " disabled=true id="firstname ">{{flagsTable.requestFlagDetail.request.user.firstName}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="lastname ">Lastname</label>
+          <div class="form-control " disabled=true id="lastname ">{{flagsTable.requestFlagDetail.request.user.lastName}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="email ">Email</label>
+          <div class="form-control " disabled=true id="email ">{{flagsTable.requestFlagDetail.request.user.email}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="city ">City</label>
+          <div class="form-control " disabled=true id="City ">{{flagsTable.requestFlagDetail.request.user.city}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="state ">State</label>
+          <div class="form-control " disabled=true id="State ">{{flagsTable.requestFlagDetail.request.user.state}}</div>
+        </div>
+        <div class="form-group col-md-12" ng-if="flagsTable.requestFlagDetail.reporterNotes != undefined">
+          <label for="reporterNotes">Reporter Notes</label>
+          <textarea class="disabled-textarea" disabled=true id="reporterNotes" rows="3" type="text">{{flagsTable.requestFlagDetail.reporterNotes}}</textarea>
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="status">Status</label>
+          <select id="status" class="form-control form-control-lg" ng-model="flagsTable.requestFlagDetail.status">
+              <option value="PENDING">PENDING</option>
+              <option value="INAPPROPRIATE">INAPPROPRIATE</option>
+              <option value="DISMISSED">DISMISSED</option>
+            </select>
+        </div>
+        <div class="form-group col-md-12">
+          <label for="reviewerNotes">Reviewer Notes</label>
+          <textarea class="textarea" id="reviewerNotes" rows="3" type="text" ng-model="flagsTable.requestFlagDetail.reviewerNotes"></textarea>
+        </div>
+      </form>
+    </div>
+
+
+
+
     <div class="col-md-12" style="float: right;">
-      <button ng-click="flagsTable.saveFlag(flagsTable.userFlagDetail)" class="btn blue-btn pull-right">save</button>
+      <button ng-click="flagsTable.saveFlag(flagsTable.requestFlagDetail)" class="btn blue-btn pull-right">save</button>
       <button ng-click="flagsTable.showTable = true" class="btn white-btn pull-right">back</button>
     </div>
   </div>

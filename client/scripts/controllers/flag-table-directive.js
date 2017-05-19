@@ -5,7 +5,7 @@ angular.module('nearbyAdminApp')
     return {
       scope: {
         flags: '=',
-        type: '@', //can be user, request, or response
+        type: '=', //can be user, request, or response
         filter: '&'
       },
 
@@ -18,6 +18,8 @@ angular.module('nearbyAdminApp')
           showTable: true,
 
           userFlagDetail: {},
+
+          requestFlagDetail: {},
 
           formatDate: function(dateString) {
             if (dateString === undefined || dateString === '') {
@@ -34,7 +36,7 @@ angular.module('nearbyAdminApp')
             return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
           },
 
-          getUserDetail: function(userFlag) {
+          getUserFlagDetail: function(userFlag) {
             $scope.flagsTable.showTable = false;
             adminService.getUserFlag(userFlag._id).then(function(response) {
               if (response.data.reviewerNotes === undefined) {
@@ -46,9 +48,23 @@ angular.module('nearbyAdminApp')
             })
           },
 
+          getRequestFlagDetail: function(requestFlag) {
+            $scope.flagsTable.showTable = false;
+            adminService.getRequestFlag(requestFlag._id).then(function(response) {
+              if (response.data.reviewerNotes === undefined) {
+                response.data.reviewerNotes = "";
+              }
+              $scope.flagsTable.requestFlagDetail = response.data;
+            }, function(error) {
+              cosole.log(error);
+            })
+          },
+
           getDetail: function(flag) {
             if ($scope.type === 'user') {
-              $scope.flagsTable.getUserDetail(flag);
+              $scope.flagsTable.getUserFlagDetail(flag);
+            } else if ($scope.type === 'request') {
+              $scope.flagsTable.getRequestFlagDetail(flag);
             }
           },
 
@@ -61,38 +77,16 @@ angular.module('nearbyAdminApp')
               }, function(error) {
                 cosole.log(error);
               })
+            } else if ($scope.type === 'request') {
+              adminService.saveRequestFlag(flag).then(function(response) {
+                $scope.filter();
+                $scope.flagsTable.showTable = true;
+              }, function(error) {
+                cosole.log(error);
+              })
             }
           }
         }
-
-        $scope.$watchCollection('messages', function() {
-          if (!$scope.messages) {
-            return;
-          }
-        });
-
-        $scope.type = function(type) {
-          switch (type) {
-            case 'danger':
-            case 'error':
-              return 'danger';
-            case 'success':
-              return 'success';
-            case 'info':
-              return 'info';
-            case 'warning':
-              return 'warning';
-            case 'lock':
-            case 'unlock':
-              return 'warning';
-            default:
-              return '';
-          }
-        };
-
-        $scope.remove = function(index) {
-          $scope.messages.splice(index, 1);
-        };
       },
       templateUrl: '../../views/flag-table.html'
 

@@ -36,6 +36,8 @@ angular.module('nearbyAdminApp')
 
       selectedFlagStatus: 'ALL',
 
+      flagType: 'user',
+
       radiusOptions: [{
         name: "none - don't limit results by location",
         radius: 0
@@ -148,23 +150,42 @@ angular.module('nearbyAdminApp')
           })
       },
 
-      getFlags: function(queryParams, type) {
+      getFlags: function(queryParams) {
+        var type = $scope.data.getFlagType();
         $scope.data.loading = true;
-        adminService.fetchUserFlags(queryParams)
-          .then(function(response) {
-            $scope.data.flags = response.data;
-            $scope.data.pagination.total = response.headers('X-Total-Count');
-            if (!$scope.data.showPagination) {
-              $scope.data.showPagination = true;
-            }
-            $scope.data.loading = false;
-          }, function(error) {
-            $scope.data.loading = false;
-            //if unauthorized, go to login page
-            if (error.status === 401) {
-              $state.go('login');
-            }
-          })
+        if (type === 'user') {
+          adminService.fetchUserFlags(queryParams)
+            .then(function(response) {
+              $scope.data.flags = response.data;
+              $scope.data.pagination.total = response.headers('X-Total-Count');
+              if (!$scope.data.showPagination) {
+                $scope.data.showPagination = true;
+              }
+              $scope.data.loading = false;
+            }, function(error) {
+              $scope.data.loading = false;
+              //if unauthorized, go to login page
+              if (error.status === 401) {
+                $state.go('login');
+              }
+            })
+        } else if (type === 'request') {
+          adminService.fetchRequestFlags(queryParams)
+            .then(function(response) {
+              $scope.data.flags = response.data;
+              $scope.data.pagination.total = response.headers('X-Total-Count');
+              if (!$scope.data.showPagination) {
+                $scope.data.showPagination = true;
+              }
+              $scope.data.loading = false;
+            }, function(error) {
+              $scope.data.loading = false;
+              //if unauthorized, go to login page
+              if (error.status === 401) {
+                $state.go('login');
+              }
+            })
+        }
       },
 
       getFilterMap: function() {
@@ -256,7 +277,7 @@ angular.module('nearbyAdminApp')
             var statusQuery = "&status=" + $scope.data.selectedFlagStatus;
             query += statusQuery;
           }
-          $scope.data.getFlags(query, 'user');
+          $scope.data.getFlags(query);
         }
       },
 
@@ -274,6 +295,7 @@ angular.module('nearbyAdminApp')
 
       fetchObject: function() {
         $scope.data.loading = true;
+        $scope.data.flagType = $scope.data.getFlagType();
         $scope.data.pagination.offset = 0;
         $scope.data.selectedRadius = $scope.data.radiusOptions[0];
         $scope.data.filters.createdStart = moment("01-01-2017 00:00").format('MM/DD/YYYY HH:MM');
