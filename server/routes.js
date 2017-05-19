@@ -14,6 +14,8 @@ export default function(app) {
   app.use('/api/users', require('./api/user'));
   app.use('/api/requests/flags', require('./api/request-flag'));
   app.use('/api/requests', require('./api/request'));
+  app.use('/api/responses/flags', require('./api/response-flag'));
+
 
   app.use('/auth', require('./auth').default);
 

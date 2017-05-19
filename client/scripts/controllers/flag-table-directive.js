@@ -21,6 +21,8 @@ angular.module('nearbyAdminApp')
 
           requestFlagDetail: {},
 
+          responseFlagDetail: {},
+
           formatDate: function(dateString) {
             if (dateString === undefined || dateString === '') {
               return;
@@ -44,7 +46,7 @@ angular.module('nearbyAdminApp')
               }
               $scope.flagsTable.userFlagDetail = response.data;
             }, function(error) {
-              cosole.log(error);
+              console.log(error);
             })
           },
 
@@ -56,7 +58,19 @@ angular.module('nearbyAdminApp')
               }
               $scope.flagsTable.requestFlagDetail = response.data;
             }, function(error) {
-              cosole.log(error);
+              console.log(error);
+            })
+          },
+
+          getResponseFlagDetail: function(responseFlag) {
+            $scope.flagsTable.showTable = false;
+            adminService.getResponseFlag(responseFlag._id).then(function(response) {
+              if (response.data.reviewerNotes === undefined) {
+                response.data.reviewerNotes = "";
+              }
+              $scope.flagsTable.responseFlagDetail = response.data;
+            }, function(error) {
+              console.log(error);
             })
           },
 
@@ -65,24 +79,32 @@ angular.module('nearbyAdminApp')
               $scope.flagsTable.getUserFlagDetail(flag);
             } else if ($scope.type === 'request') {
               $scope.flagsTable.getRequestFlagDetail(flag);
+            } else if ($scope.type === 'response') {
+              $scope.flagsTable.getResponseFlagDetail(flag);
             }
           },
 
-          saveFlag: function(flag) {
-            console.log(flag.reviewerNotes);
+          saveFlag: function() {
             if ($scope.type === 'user') {
-              adminService.saveUserFlag(flag).then(function(response) {
+              adminService.saveUserFlag($scope.flagsTable.userFlagDetail).then(function(response) {
                 $scope.filter();
                 $scope.flagsTable.showTable = true;
               }, function(error) {
-                cosole.log(error);
+                console.log(error);
               })
             } else if ($scope.type === 'request') {
-              adminService.saveRequestFlag(flag).then(function(response) {
+              adminService.saveRequestFlag($scope.flagsTable.requestFlagDetail).then(function(response) {
                 $scope.filter();
                 $scope.flagsTable.showTable = true;
               }, function(error) {
-                cosole.log(error);
+                console.log(error);
+              })
+            } else if ($scope.type === 'response') {
+              adminService.saveResponseFlag($scope.flagsTable.responseFlagDetail).then(function(response) {
+                $scope.filter();
+                $scope.flagsTable.showTable = true;
+              }, function(error) {
+                console.log(error);
               })
             }
           }

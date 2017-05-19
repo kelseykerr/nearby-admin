@@ -185,6 +185,22 @@ angular.module('nearbyAdminApp')
                 $state.go('login');
               }
             })
+        } else if (type === 'response') {
+          adminService.fetchResponseFlags(queryParams)
+            .then(function(response) {
+              $scope.data.flags = response.data;
+              $scope.data.pagination.total = response.headers('X-Total-Count');
+              if (!$scope.data.showPagination) {
+                $scope.data.showPagination = true;
+              }
+              $scope.data.loading = false;
+            }, function(error) {
+              $scope.data.loading = false;
+              //if unauthorized, go to login page
+              if (error.status === 401) {
+                $state.go('login');
+              }
+            })
         }
       },
 

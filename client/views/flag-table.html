@@ -166,13 +166,90 @@
           <textarea class="textarea" id="reviewerNotes" rows="3" type="text" ng-model="flagsTable.requestFlagDetail.reviewerNotes"></textarea>
         </div>
       </form>
+
+      <!--form for response flags-->
+      <form class="flag-detail-form" ng-switch-when="response">
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="id">ID</label>
+          <input type="text" class="form-control" disabled=true id="id" ng-model="flagsTable.responseFlagDetail._id">
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="reportedDate">Reported Date</label>
+          <div class="form-control" disabled=true id="reportedDate">{{flagsTable.formatDate(flagsTable.responseFlagDetail.reportedDate)}}</div>
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="requestDate">Response Post Date</label>
+          <div class="form-control" disabled=true id="requestDate">{{flagsTable.formatDate(flagsTable.responseFlagDetail.response.responseTime)}}</div>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="itemName">Response Offer Price</label>
+          <div class="form-control" disabled=true id="itemName">{{flagsTable.responseFlagDetail.response.offerPrice}}</div>
+        </div>
+        <div class="form-group col-md-4" ng-if="flagsTable.responseFlagDetail.response.exchangeLocation !== undefined">
+          <label for="exchangeLocation">Exchange Location</label>
+          <div class="form-control" disabled=true id="exchangeLocation">{{flagsTable.responseFlagDetail.response.exchangeLocation}}</div>
+        </div>
+        <div class="form-group col-md-4" ng-if="flagsTable.responseFlagDetail.response.returnLocation !== undefined">
+          <label for="returnLocation">Return Location</label>
+          <div class="form-control" disabled=true id="returnLocation">{{flagsTable.responseFlagDetail.response.returnLocation}}</div>
+        </div>
+        <div class="form-group col-md-12" ng-if="flagsTable.responseFlagDetail.response.description !== undefined">
+          <label for="description">Response Description</label>
+          <div class="form-control" disabled=true id="description">{{flagsTable.responseFlagDetail.response.description}}</div>
+        </div>
+        <div class="nested-form-header col-md-12 ">Responder Information</div>
+        <div class="form-group col-md-4 ">
+          <label for="id ">ID</label>
+          <div class="form-control " disabled=true id="id ">{{flagsTable.responseFlagDetail.user._id}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="firstname ">Firstname</label>
+          <div class="form-control " disabled=true id="firstname ">{{flagsTable.responseFlagDetail.user.firstName}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="lastname ">Lastname</label>
+          <div class="form-control " disabled=true id="lastname ">{{flagsTable.responseFlagDetail.user.lastName}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="email ">Email</label>
+          <div class="form-control " disabled=true id="email ">{{flagsTable.responseFlagDetail.user.email}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="city ">City</label>
+          <div class="form-control " disabled=true id="City ">{{flagsTable.responseFlagDetail.user.city}}</div>
+        </div>
+        <div class="form-group col-md-4 ">
+          <label for="state ">State</label>
+          <div class="form-control " disabled=true id="State ">{{flagsTable.reqsponseFlagDetail.user.state}}</div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="reporterID">Reporter ID</label>
+          <div class="form-control" disabled=true id="reporterID" type="text">{{flagsTable.responseFlagDetail.reporterId}}</div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="requestID">Request ID</label>
+          <div class="form-control" disabled=true id="requestID" type="text">{{flagsTable.responseFlagDetail.response.requestId}}</div>
+        </div>
+        <div class="form-group col-md-12" ng-if="flagsTable.responseFlagDetail.reporterNotes != undefined">
+          <label for="reporterNotes">Reporter Notes</label>
+          <textarea class="disabled-textarea" disabled=true id="reporterNotes" rows="3" type="text">{{flagsTable.responseFlagDetail.reporterNotes}}</textarea>
+        </div>
+        <div class="form-group col-md-4 margin-top-10">
+          <label for="status">Status</label>
+          <select id="status" class="form-control form-control-lg" ng-model="flagsTable.responseFlagDetail.status">
+              <option value="PENDING">PENDING</option>
+              <option value="INAPPROPRIATE">INAPPROPRIATE</option>
+              <option value="DISMISSED">DISMISSED</option>
+            </select>
+        </div>
+        <div class="form-group col-md-12">
+          <label for="reviewerNotes">Reviewer Notes</label>
+          <textarea class="textarea" id="reviewerNotes" rows="3" type="text" ng-model="flagsTable.responseFlagDetail.reviewerNotes"></textarea>
+        </div>
+      </form>
     </div>
-
-
-
-
     <div class="col-md-12" style="float: right;">
-      <button ng-click="flagsTable.saveFlag(flagsTable.requestFlagDetail)" class="btn blue-btn pull-right">save</button>
+      <button ng-click="flagsTable.saveFlag()" class="btn blue-btn pull-right">save</button>
       <button ng-click="flagsTable.showTable = true" class="btn white-btn pull-right">back</button>
     </div>
   </div>

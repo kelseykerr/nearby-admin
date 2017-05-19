@@ -1,9 +1,9 @@
 'use strict';
 
-import RequestFlag from './request-flag.model';
+import ResponseFlag from './response-flag.model';
 import config from '../../config/environment';
 import User from '../user/user.model';
-import Request from '../request/request.model';
+import Response from '../response/response.model';
 import jwt from 'jsonwebtoken';
 
 function validationError(res, statusCode) {
@@ -19,21 +19,6 @@ function handleError(res, statusCode) {
     return res.status(statusCode).send(err);
   };
 }
-
-function getUser(userId) {
-  var user = User.findById(userId).exec()
-    .then(u => {
-      if (!u) {
-        return null;
-      }
-      return u;
-    })
-    .catch(err => {
-      return null
-    });
-  return user;
-}
-
 
 /**
  * Get list of userFlags
@@ -76,20 +61,17 @@ export function searchObjects(req, res) {
     mongoQuery.status = req.param('status').toUpperCase();
   }
 
-  return RequestFlag.find(mongoQuery)
+  return ResponseFlag.find(mongoQuery)
     .limit(limit)
     .skip(offset)
     .sort({
       reportedDate: 'asc'
     })
-    .exec(function(err, requestFlags) {
-      RequestFlag.count(mongoQuery).exec(function(err, count) {
-        res.header('X-Total-Count', count).status(200).json(requestFlags);
+    .exec(function(err, responseFlags) {
+      ResponseFlag.count(mongoQuery).exec(function(err, count) {
+        res.header('X-Total-Count', count).status(200).json(responseFlags);
       })
     })
-    /*.then(users => {
-      res.status(200).json(users);
-    })*/
     .catch(handleError(res));
 }
 
@@ -97,28 +79,36 @@ export function searchObjects(req, res) {
  * Get the userFlag and populate it with the user objects of the reporter and the reportee
  */
 export function show(req, res, next) {
-  var requestFlagId = req.params.id;
+  var responseFlagId = req.params.id;
 
-  return RequestFlag.findById(requestFlagId).exec()
-    .then(reqFlag => {
-      reqFlag = reqFlag.toObject();
-      if (!reqFlag) {
+  return ResponseFlag.findById(responseFlagId).exec()
+    .then(respFlag => {
+      respFlag = respFlag.toObject();
+      console.log(respFlag);
+      if (!respFlag) {
         return res.status(404).end();
       }
-      var promise = Request.findById(reqFlag.requestId).exec();
-      promise.then(req => {
-        if (req) {
-          reqFlag.request = req;
+      var promise = Response.findById(respFlag.responseId).exec();
+      promise.then(resp => {
+        console.log(resp);
+        if (resp) {
+          respFlag.response = resp;
+          resp = resp.toObject();
         }
-        res.json(reqFlag);
+        return User.findById(resp.sellerId).exec();
+        //res.json(respFlag);
+      }).then(user => {
+        respFlag.user = user;
+        res.json(respFlag);
       }).catch(err => next(err));
-    }).catch(err => next(err));
+    })
+    .catch(err => next(err));
 }
 
 export function update(req, res) {
-  var reqFlagBody = req.body;
-  var id = reqFlagBody._id;
-  var reqFlag = RequestFlag.findById(id).exec().then(f => {
+  var respFlagBody = req.body;
+  var id = respFlagBody._id;
+  var respFlag = ResponseFlag.findById(id).exec().then(f => {
     if (!f) {
       return null;
     }
@@ -129,14 +119,14 @@ export function update(req, res) {
     '_id': id
   };
   req.newData = {};
-  if (reqFlagBody.status !== undefined) {
-    req.newData.status = reqFlagBody.status.toUpperCase();
+  if (respFlagBody.status !== undefined) {
+    req.newData.status = respFlagBody.status.toUpperCase();
   }
-  if (reqFlagBody.reviewerNotes !== undefined) {
-    req.newData.reviewerNotes = reqFlagBody.reviewerNotes;
+  if (respFlagBody.reviewerNotes !== undefined) {
+    req.newData.reviewerNotes = respFlagBody.reviewerNotes;
     req.newData.reviewedDate = new Date();
   }
-  RequestFlag.findOneAndUpdate(query, req.newData, {
+  ResponseFlag.findOneAndUpdate(query, req.newData, {
     upsert: false
   }, function(err, doc) {
     if (err) return res.send(500, {
@@ -146,9 +136,9 @@ export function update(req, res) {
       req.update = {}
       req.update.inappropriate = true;
       query = {
-        '_id': reqFlagBody.requestId
+        '_id': respFlagBody.responseId
       };
-      Request.findOneAndUpdate(query, req.update, {
+      Response.findOneAndUpdate(query, req.update, {
         upsert: false
       }, function(err, doc) {
         return res.send("succesfully saved");
