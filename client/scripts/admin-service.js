@@ -11,6 +11,13 @@ angular.module('nearbyAdminApp')
         });
       },
 
+      fetchUsersGraph: function(queryParams) {
+        return $http({
+          method: 'GET',
+          url: '/api/users/graph' + (queryParams !== undefined ? queryParams : '')
+        });
+      },
+
       fetchRequests: function(queryParams) {
         return $http({
           method: 'GET',

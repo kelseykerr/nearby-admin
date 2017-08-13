@@ -160,6 +160,10 @@
   background-color: #b3b3b3;
 }
 
+.max-width-100 {
+  max-width: 100px;
+}
+
 .filter-btn {
   cursor: pointer;
   line-height: 20px;

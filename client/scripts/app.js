@@ -21,6 +21,11 @@ angular
         templateUrl: 'views/data.html',
         controller: 'dataCtrl'
       })
+      .state('graphs', {
+        url: '/graphs',
+        templateUrl: 'view/graphs.html',
+        controller: 'graphsCtrl'
+      })
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html',

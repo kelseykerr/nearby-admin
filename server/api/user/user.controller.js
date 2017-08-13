@@ -87,6 +87,123 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
+export function graph(req, res) {
+  var queryParams = req.query;
+  var createdStart;
+  var createdEnd;
+  var interval = "weekly";
+  var xAxis = [];
+  var yAxis = [];
+  if (queryParams.hasOwnProperty("createdStart")) {
+    createdStart = queryParams.createdStart;
+  }
+  if (queryParams.hasOwnProperty("createdEnd")) {
+    createdEnd = queryParams.createdEnd;
+  }
+  if (queryParams.hasOwnProperty("interval")) {
+    if (queryParams.interval === "daily" || queryParams.interval === "weekly" || queryParams.interval === "monthly") {
+      interval = queryParams.interval;
+    }
+  }
+  var radius = req.param('radius');
+  var lng = req.param('longitude');
+  var lat = req.param('latitude');
+
+  var mongoQuery = {};
+  if (radius != undefined && lng != undefined && lat != undefined) {
+    mongoQuery.homeLocation = {
+      "$near": {
+        "$geometry": {
+          "type": "Point",
+          "coordinates": [parseFloat(lng), parseFloat(lat)]
+        },
+        "$maxDistance": parseFloat(radius) * 1609.344
+      }
+    }
+  }
+  if (createdStart !== undefined && createdEnd !== undefined) {
+    mongoQuery.createdDate = {
+      "$gte": new Date(createdStart),
+      "$lt": new Date(createdEnd)
+    };
+  } else if (createdStart !== undefined) {
+    mongoQuery.createdDate = {
+      "$gte": new Date(createdStart)
+    };
+  } else if (createdEnd !== undefined) {
+    mongoQuery.createdDate = {
+      "$lt": new Date(createdEnd)
+    };
+  }
+
+  var mapFn = function() {
+    var dt = this._id.getTimestamp();
+    var dt_str = '';
+    if (interval === 'monthly') {
+      var yr = dt.getFullYear();
+      var mo = dt.getMonth() + 1;
+      dt_str = yr + '-' + ((mo < 10) ? '0' + mo : mo);
+    } else { //assume daily for now
+      var yr = dt.getFullYear();
+      var mo = dt.getMonth() + 1;
+      var dy = dt.getDate();
+      dt_str = yr + '-' + ((mo < 10) ? '0' + mo : mo) + '-' + ((dy < 10) ? '0' + dy : dy);
+    }
+    console.log(dt_str + '**dt str');
+    emit(dt_str, {
+      count: 1
+    });
+  };
+  var redFn = function(k, v) {
+    var total = 0;
+    console.log('***k: ' + k);
+    console.log('***v: ' + v);
+    if (v === undefined) {
+
+    } else {
+      v.forEach(function(value) {
+        total += value['count'];
+      });
+    }
+
+    return {
+      count: total
+    };
+  };
+
+  var options = {
+    out: {
+      replace: 'collectionName'
+    },
+    query: {
+      mongoQuery
+    }
+  }
+
+  return User.mapReduce({
+    map: mapFn,
+    reduce: redFn,
+    options: {
+      out: {
+        replace: 'collectionName'
+      },
+      query: {
+        mongoQuery
+      }
+    }
+  }, function(err, results) {
+    res.status(200).json(results);
+
+    /*if (err != null) {
+      console.log(err);
+      next(err);
+    } else {
+      res.json(results);
+    }*/
+  });
+
+}
+
 /**
  * Get a single user
  */
